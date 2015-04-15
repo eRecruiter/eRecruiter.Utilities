@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace eRecruiter.Utilities
 {
-    public static class StringExtensionMethods
+    public static class StringExtensions
     {
         public static string MaxLen(this string s, int maxLength)
         {

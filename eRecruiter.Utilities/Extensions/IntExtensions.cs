@@ -2,7 +2,7 @@
 
 namespace eRecruiter.Utilities
 {
-    public static class IntExtensionMethods
+    public static class IntExtensions
     {
         public static bool IsInt(this string s)
         {

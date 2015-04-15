@@ -2,7 +2,7 @@
 
 namespace eRecruiter.Utilities
 {
-    public static class BoolExtensionMethods
+    public static class BoolExtensions
     {
         public static bool IsBool(this string s)
         {

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace eRecruiter.Utilities
 {
-    public static class DecimalExtensionMethods
+    public static class DecimalExtensions
     {
         public static bool IsDecimal(this string s)
         {

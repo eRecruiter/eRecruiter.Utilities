@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace eRecruiter.Utilities
 {
-    public static class DateTimeExtensionMethods
+    public static class DateTimeExtensions
     {
         public static bool IsDate(this string s)
         {
