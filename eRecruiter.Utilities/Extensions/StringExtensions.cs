@@ -12,26 +12,42 @@ namespace eRecruiter.Utilities
 
         public static string MaxLen(this string s, int maxLength, string appendWhenShortened)
         {
-            if (s.IsNoE())
+            if (s.IsNullOrEmpty())
+            {
                 return "";
+            }
             if (s.Length > maxLength)
+            {
                 return s.Substring(0, maxLength) + (appendWhenShortened.HasValue() ? appendWhenShortened : "");
+            }
             return s;
         }
 
-        public static bool IsNoE(this string s)
+        public static bool IsNullOrEmpty(this string s)
         {
             return string.IsNullOrEmpty(s);
         }
 
-        public static bool IsNoW(this string s)
+        [Obsolete("Use IsNullOrEmpty extension method.")]
+        public static bool IsNoE(this string s)
+        {
+            return s.IsNullOrEmpty();
+        }
+
+        public static bool IsNullOrWhiteSpace(this string s)
         {
             return string.IsNullOrWhiteSpace(s);
         }
 
+        [Obsolete("Use IsNullOrWhiteSpace extension method.")]
+        public static bool IsNoW(this string s)
+        {
+            return s.IsNullOrWhiteSpace();
+        }
+
         public static bool HasValue(this string s)
         {
-            return !s.IsNoE();
+            return !s.IsNullOrEmpty();
         }
 
         /// <summary>
@@ -42,7 +58,7 @@ namespace eRecruiter.Utilities
         /// <returns></returns>
         public static string ValueOrEmpty(this string s)
         {
-            return s.IsNoE() ? string.Empty : s;
+            return s.IsNullOrEmpty() ? string.Empty : s;
         }
 
         /// <summary>
@@ -54,16 +70,16 @@ namespace eRecruiter.Utilities
         /// <returns></returns>
         public static string ValueOr(this string s, string defaultValue)
         {
-            return s.IsNoE() ? defaultValue : s;
+            return s.IsNullOrEmpty() ? defaultValue : s;
         }
 
         public static bool Is(this string s, string t)
         {
-            if (t.IsNoE() && s.IsNoE())
+            if (t.IsNullOrEmpty() && s.IsNullOrEmpty())
+            {
                 return true;
-            if (s.HasValue() && s.Equals(t, StringComparison.InvariantCultureIgnoreCase))
-                return true;
-            return false;
+            }
+            return s.HasValue() && s.Equals(t, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool Is(this string s, params string[] t)
@@ -74,27 +90,29 @@ namespace eRecruiter.Utilities
         public static bool Is(this string s, bool b)
         {
             if (!s.IsBool())
+            {
                 return false;
+            }
             return s.GetBool() == b;
         }
 
         public static bool Is(this string s, int i)
         {
             if (!s.IsInt())
+            {
                 return false;
+            }
             return s.GetInt() == i;
         }
 
         public static string GetStringOrNull(this string s)
         {
-            if (s.HasValue())
-                return s;
-            return null;
+            return s.HasValue() ? s : null;
         }
 
         public static string RemoveCrlf(this string s)
         {
-            return !s.IsNoE() ? s.Replace("\n", "").Replace("\r", "") : s;
+            return !s.IsNullOrEmpty() ? s.Replace("\n", "").Replace("\r", "") : s;
         }
     }
 }

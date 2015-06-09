@@ -16,9 +16,7 @@ namespace eRecruiter.Utilities
 
         public static string Get(string key, string defaultValue)
         {
-            if (ConfigurationManager.AppSettings[key].IsNoE())
-                return defaultValue;
-            return ConfigurationManager.AppSettings[key];
+            return ConfigurationManager.AppSettings[key].IsNullOrEmpty() ? defaultValue : ConfigurationManager.AppSettings[key];
         }
     }
 }

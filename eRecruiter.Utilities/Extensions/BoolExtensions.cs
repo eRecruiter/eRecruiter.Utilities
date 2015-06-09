@@ -11,12 +11,16 @@ namespace eRecruiter.Utilities
 
         public static bool IsBool(this string s, bool emptyIsBool)
         {
-            if (emptyIsBool && s.IsNoE())
+            if (emptyIsBool && s.IsNullOrEmpty())
+            {
                 return true;
+            }
 
             //special handling for the MCV checkbox
             if (s.Is("true,false") || s.Is("false,false"))
+            {
                 return true;
+            }
 
             bool b;
             return bool.TryParse((s ?? "").ToLower(), out b);
@@ -24,29 +28,33 @@ namespace eRecruiter.Utilities
 
         public static bool GetBool(this string s)
         {
-            if (s.IsBool())
+            if (!s.IsBool())
             {
-                //special handling for the MVC checkbox
-                if (s.Is("true,false"))
-                    return true;
-                if (s.Is("false,false"))
-                    return false;
-                return bool.Parse(s.ToLower());
+                throw new FormatException(string.Format("The string '{0}' is not a bool.", s));
             }
-            throw new FormatException("The string '" + s + "' is not a bool.");
+            //special handling for the MVC checkbox
+            if (s.Is("true,false"))
+            {
+                return true;
+            }
+            if (s.Is("false,false"))
+            {
+                return false;
+            }
+            return bool.Parse(s.ToLower());
         }
 
         public static bool GetBool(this string s, bool defaultValue)
         {
-            if (s.IsBool())
-                return s.GetBool();
-            return defaultValue;
+            return s.IsBool() ? s.GetBool() : defaultValue;
         }
 
         public static bool? GetBoolOrNull(this string s)
         {
             if (s.IsBool())
+            {
                 return s.GetBool();
+            }
             return null;
         }
     }

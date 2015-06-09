@@ -13,16 +13,20 @@ namespace eRecruiter.Utilities
 
         public static bool IsDecimal(this string s, CultureInfo culture)
         {
-            if (s.IsNoE())
+            if (s.IsNullOrEmpty())
+            {
                 return false;
+            }
             decimal d;
             return decimal.TryParse(s, NumberStyles.Any, culture, out d);
         }
 
         public static bool IsDecimalCultureInvariant(this string s)
         {
-            if (s.IsNoE())
+            if (s.IsNullOrEmpty())
+            {
                 return false;
+            }
             decimal d;
             return decimal.TryParse(GetCultureFixedDecimal(s), NumberStyles.Any, CultureInfo.InvariantCulture, out d);
         }
@@ -35,28 +39,33 @@ namespace eRecruiter.Utilities
         public static decimal GetDecimal(this string s, CultureInfo culture)
         {
             if (s.IsDecimal(culture))
+            {
                 return decimal.Parse(s, NumberStyles.Any, culture);
-            throw new ArgumentException("The string '" + s.ToString(culture) + "' is not a decimal.");
+            }
+            throw new ArgumentException(string.Format("The string '{0}' is not a decimal.", s.ToString(culture)));
         }
 
         public static decimal GetDecimalCultureInvariant(this string s)
         {
             if (s.IsDecimalCultureInvariant())
+            {
                 return decimal.Parse(GetCultureFixedDecimal(s), NumberStyles.Any, CultureInfo.InvariantCulture);
-            throw new ArgumentException("The string '" + s.ToString(CultureInfo.InvariantCulture) + "' is not a decimal.");
+            }
+            throw new ArgumentException(string.Format("The string '{0}' is not a decimal.",
+                s.ToString(CultureInfo.InvariantCulture)));
         }
 
         public static decimal GetDecimal(this string s, decimal defaultValue)
         {
-            if (s.IsDecimal())
-                return s.GetDecimal();
-            return defaultValue;
+            return s.IsDecimal() ? s.GetDecimal() : defaultValue;
         }
 
         public static decimal? GetDecimalOrNull(this string s)
         {
             if (s.IsDecimal())
+            {
                 return s.GetDecimal();
+            }
             return null;
         }
 
@@ -68,36 +77,38 @@ namespace eRecruiter.Utilities
         /// <returns></returns>
         private static string GetCultureFixedDecimal(string s)
         {
-            if (s.HasValue())
+            if (!s.HasValue())
             {
-                var pointIndex = s.IndexOf('.');
-                var commaIndex = s.IndexOf(',');
+                return s;
+            }
+            var pointIndex = s.IndexOf('.');
+            var commaIndex = s.IndexOf(',');
 
-                var containedBothSeparators = false;
+            var containedBothSeparators = false;
 
-                //replace 1.500,20 with 1500,20
-                if (pointIndex >= 0 && commaIndex > pointIndex)
+            //replace 1.500,20 with 1500,20
+            if (pointIndex >= 0 && commaIndex > pointIndex)
+            {
+                s = s.Replace(".", "");
+                containedBothSeparators = true;
+            }
+            else if (commaIndex >= 0 && pointIndex > commaIndex)
+            {
+                //replace 1,500.20 with 1500.20           
+                s = s.Replace(",", "");
+                containedBothSeparators = true;
+            }
+
+            s = s.Replace(",", "."); //we only support invariant culture decimals
+
+            //we want to remove all thousand-separators
+            //but only if all separators are in 3er-steps and are above a certain length
+            if (!containedBothSeparators && s.Length >= 5)
+            {
+                if (Regex.IsMatch(s, @"^\-?\d{1,3}(\.\d\d\d)+$"))
                 {
                     s = s.Replace(".", "");
-                    containedBothSeparators = true;
                 }
-                else if (commaIndex >= 0 && pointIndex > commaIndex)
-                {
-                    //replace 1,500.20 with 1500.20           
-                    s = s.Replace(",", "");
-                    containedBothSeparators = true;
-                }
-
-                s = s.Replace(",", "."); //we only support invariant culture decimals
-
-                //we want to remove all thousand-separators
-                //but only if all separators are in 3er-steps and are above a certain length
-                if (!containedBothSeparators && s.Length >= 5)
-                {
-                    if (Regex.IsMatch(s, @"^\-?\d{1,3}(\.\d\d\d)+$"))
-                        s = s.Replace(".", "");
-                }
-
             }
             return s;
         }

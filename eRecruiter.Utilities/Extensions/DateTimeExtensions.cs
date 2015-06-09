@@ -12,8 +12,10 @@ namespace eRecruiter.Utilities
 
         public static bool IsDate(this string s, bool emptyIsDate)
         {
-            if (emptyIsDate && s.IsNoE())
+            if (emptyIsDate && s.IsNullOrEmpty())
+            {
                 return true;
+            }
             DateTime d;
             var result = DateTime.TryParse(s, out d);
             return result || DateTime.TryParse(s, CultureInfo.InvariantCulture, DateTimeStyles.None, out d);
@@ -21,23 +23,23 @@ namespace eRecruiter.Utilities
 
         public static DateTime GetDate(this string s)
         {
-            if (s.IsDate())
-                try
-                {
-                    return DateTime.Parse(s);
-                }
-                catch
-                {
-                    return DateTime.Parse(s, CultureInfo.InvariantCulture, DateTimeStyles.None);
-                }
-            throw new FormatException("The string '" + s + "' is not a date.");
+            if (!s.IsDate())
+            {
+                throw new FormatException("The string '" + s + "' is not a date.");
+            }
+            try
+            {
+                return DateTime.Parse(s);
+            }
+            catch
+            {
+                return DateTime.Parse(s, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            }
         }
 
         public static DateTime GetDate(this string s, DateTime defaultValue)
         {
-            if (s.IsDate())
-                return s.GetDate();
-            return defaultValue;
+            return s.IsDate() ? s.GetDate() : defaultValue;
         }
 
         /// <summary>
@@ -48,7 +50,9 @@ namespace eRecruiter.Utilities
         public static DateTime? GetDateOrNull(this string s)
         {
             if (s.IsDate())
+            {
                 return s.GetDate();
+            }
             return null;
         }
 
