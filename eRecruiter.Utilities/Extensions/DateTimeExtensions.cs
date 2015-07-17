@@ -65,5 +65,16 @@ namespace eRecruiter.Utilities
         {
             return FirstDayOfMonthFromDateTime(dateTime).AddMonths(1).AddDays(-1);
         }
+
+        /// <summary>
+        /// Gets the 11:59:59 PM instance of a DateTime.
+        /// </summary>
+        public static DateTime EndOfDay(this DateTime dateTime)
+        {
+            /* This should handle cases where the DateTime is either DateTime.MinValue or DateTime.MaxValue.
+             * If you call AddDays(1) on DateTime.MaxValue, you will get an exception. 
+             * Similarly, calling AddTicks(-1) on DateTime.MinValue will also throw an exception.*/
+            return dateTime.Date == DateTime.MinValue.Date ? dateTime.Date.AddDays(1).AddTicks(-1) : dateTime.Date.AddTicks(-1).AddDays(1);
+        }
     }
 }
