@@ -56,11 +56,21 @@ namespace eRecruiter.Utilities
             return null;
         }
 
+        /// <summary>
+        /// Get the first day of month where a given date lies in.
+        /// </summary>
+        /// <param name="dateTime">date</param>
+        /// <returns>Returns first day of month.</returns>
         public static DateTime FirstDayOfMonthFromDateTime(this DateTime dateTime)
         {
             return new DateTime(dateTime.Year, dateTime.Month, 1);
         }
 
+        /// <summary>
+        /// Get the last day of month where a given date lies in.
+        /// </summary>
+        /// <param name="dateTime">date</param>
+        /// <returns>Returns last day of month.</returns>
         public static DateTime LastDayOfMonthFromDateTime(this DateTime dateTime)
         {
             return FirstDayOfMonthFromDateTime(dateTime).AddMonths(1).AddDays(-1);

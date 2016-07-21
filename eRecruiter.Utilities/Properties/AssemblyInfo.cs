@@ -3,9 +3,9 @@
 [assembly: AssemblyTitle("eRecruiter.Utilities")]
 [assembly: AssemblyDescription("eRecruiter common library")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ePunkt Internet Recruiting GmbH")]
+[assembly: AssemblyCompany("epunkt Internet Recruiting GmbH")]
 [assembly: AssemblyProduct("eRecruiter")]
-[assembly: AssemblyCopyright("Copyright © 2014")]
+[assembly: AssemblyCopyright("Copyright © 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
